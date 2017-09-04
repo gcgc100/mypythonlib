@@ -259,20 +259,16 @@ def _select(sql, first, *args):
     cursor = None
     sql = sql.replace('?', '%s')
     logging.info('SQL: %s, ARGS: %s', sql, args)
-    try:
-        cursor = _db_ctx.connection.cursor()
-        cursor.execute(sql, args)
-        if cursor.description:
-            names = [x[0] for x in cursor.description]
-        if first:
-            values = cursor.fetchone()
-            if not values:
-                return None
-            return Dict(names, values)
-        return [Dict(names, x) for x in cursor.fetchall()]
-    finally:
-        if cursor:
-            cursor.close()
+    cursor = _db_ctx.connection.cursor()
+    cursor.execute(sql, args)
+    if cursor.description:
+        names = [x[0] for x in cursor.description]
+    if first:
+        values = cursor.fetchone()
+        if not values:
+            return None
+        return Dict(names, values)
+    return [Dict(names, x) for x in cursor.fetchall()]
 
 
 @with_connection
@@ -371,17 +367,13 @@ def _update(sql, *args):
     cursor = None
     # sql = sql.replace('?', '%s')
     logging.info('SQL: %s, ARGS: %s', sql, args)
-    try:
-        cursor = _db_ctx.connection.cursor()
-        cursor.execute(sql, args)
-        ret = cursor.rowcount
-        if _db_ctx.transactions == 0:
-            logging.info('auto commit')
-            _db_ctx.connection.commit()
-        return ret
-    finally:
-        if cursor:
-            cursor.close()
+    cursor = _db_ctx.connection.cursor()
+    cursor.execute(sql, args)
+    ret = cursor.rowcount
+    if _db_ctx.transactions == 0:
+        logging.info('auto commit')
+        _db_ctx.connection.commit()
+    return ret
 
 
 def insert(table, **kw):

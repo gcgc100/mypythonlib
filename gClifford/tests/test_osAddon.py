@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-import sys
 import os
 import shutil
 from gClifford import osAddon
@@ -20,9 +19,11 @@ class TestOsAddon(unittest.TestCase):
     def tearDownClass(cls):
         shutil.rmtree("./gClifford/tests/dataForTest/output")
         os.mkdir("./gClifford/tests/dataForTest/output")
-    
+
     def setUp(self):
-        pass
+        outputdir = "./gClifford/tests/dataForTest/output"
+        if not os.path.isdir(outputdir):
+            os.mkdir(outputdir)
 
     def tearDown(self):
         pass
@@ -32,9 +33,10 @@ class TestOsAddon(unittest.TestCase):
         os.rmdir("testDir")
         osAddon.ensure_dir("test.md")
         osAddon.ensure_dir("./test")
-            
+
     def test_get_size(self):
-        self.assertEqual(osAddon.get_size(os.path.dirname(os.path.abspath(__file__))+"/testSize"), 1940)
+        self.assertEqual(osAddon.get_size(
+            os.path.dirname(os.path.abspath(__file__))+"/testSize"), 1775)
 
     def test_smartCopy(self):
         testdata = "./gClifford/tests/dataForTest/"
@@ -49,6 +51,7 @@ class TestOsAddon(unittest.TestCase):
         self.assertEqual(len(os.listdir(output)), 3)
         with self.assertRaises(IOError):
             osAddon.smartCopy(testdata+"b.txt", output)
+
 
 if __name__ == "__main__":
     unittest.main()

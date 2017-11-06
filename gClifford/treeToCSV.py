@@ -42,7 +42,11 @@ def tree_to_CSV(root, csvfile, header=None, get_data=None, get_children=None,
         row = []
         node = l
         while node is not None:
-            row.insert(0, get_data(node))
+            d = get_data(node)
+            if isinstance(d, list):
+                row = d + row
+            else:
+                row.insert(0, d)
             node = get_parent(node)
         if depth is None:
             depth = len(row)

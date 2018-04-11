@@ -24,8 +24,7 @@ def myselect:
 @_createEngine:
 def myinsert:
     pass
-"""
-
+""" 
 __all__ = ["create_engine", "select", "update", "insert",
            "select_int", "select_one"]
 import logging
@@ -257,7 +256,7 @@ def _select(sql, first, *args):
     """execute select SQL and return unique result or list results"""
     global _db_ctx
     cursor = None
-    sql = sql.replace('?', '%s')
+    # sql = sql.replace('?', '%s')
     logging.info('SQL: %s, ARGS: %s', sql, args)
     cursor = _db_ctx.connection.cursor()
     cursor.execute(sql, args)

@@ -19,6 +19,8 @@ class TestSqliteDB(unittest.TestCase):
         if sqliteDB.engine is None:
             sqliteDB.create_engine('test.db')
         sqliteDB.update("create table if not exists test (key text)")
-        print "aaa"
-        sqliteDB.insert('test', **{"key": '<selenium."8f35c24c", "0.097-24")>'})
-        print "bbb"
+        sqliteDB.insert('test', **{"key": 'aaa'})
+        row = sqliteDB.select("select * from test where key=?", "aaa")
+        self.assertEqual(len(row), 1)
+        self.assertEqual(row[0].key, "aaa")
+        sqliteDB.update("delete from test")

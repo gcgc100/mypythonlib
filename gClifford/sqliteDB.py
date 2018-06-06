@@ -369,10 +369,11 @@ def _update(sql, *args):
     cursor = _db_ctx.connection.cursor()
     cursor.execute(sql, args)
     ret = cursor.rowcount
+    rowid = cursor.lastrowid
     if _db_ctx.transactions == 0:
         logging.info('auto commit')
         _db_ctx.connection.commit()
-    return ret
+    return ret, rowid
 
 
 def insert(table, **kw):

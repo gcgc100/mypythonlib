@@ -19,8 +19,22 @@ class TestSqliteDB(unittest.TestCase):
         if sqliteDB.engine is None:
             sqliteDB.create_engine('test.db')
         sqliteDB.update("create table if not exists test (key text)")
-        sqliteDB.insert('test', **{"key": 'aaa'})
+        sqliteDB.insert('test', **{"key": 'aa'})
+        sqliteDB.update("update test set key=?", "aaa")
         row = sqliteDB.select("select * from test where key=?", "aaa")
         self.assertEqual(len(row), 1)
         self.assertEqual(row[0].key, "aaa")
         sqliteDB.update("delete from test")
+
+    def test_time(self):
+        if sqliteDB.engine is None:
+            sqliteDb.create_engine('test.db')
+        import time
+        t1 = time.time()
+        for i in range(100):
+            sqliteDB.insertNoCommit('test', **{"key": 'a'})
+        sqliteDB.insert('test', **{"key": 'a'})
+        t2 = time.time()
+        print t2-t1
+        sqliteDB.update("delete from test")
+

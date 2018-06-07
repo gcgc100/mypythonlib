@@ -376,7 +376,19 @@ def _update(sql, *args):
     return ret, rowid
 
 
-def insert(table, **kw):
+def __update(sql, *args):
+    global _db_ctx
+    cursor = None
+    # sql = sql.replace('?', '%s')
+    logging.info('SQL: %s, ARGS: %s', sql, args)
+    cursor = _db_ctx.connection.cursor()
+    cursor.execute(sql, args)
+    ret = cursor.rowcount
+    rowid = cursor.lastrowid
+    return ret, rowid
+
+
+def _insert(table, commit=True, **kw):
     '''
     Execute insert SQL.
 
@@ -396,7 +408,38 @@ def insert(table, **kw):
     sql = 'insert into `%s` (%s) values (%s)' % (
         table, ','.join(['`%s`' % col for col in cols]),
         ','.join(['?' for i in range(len(cols))]))
-    return _update(sql, *args)
+    if commit:
+        return _update(sql, *args)
+    else:
+        return __update(sql, *args)
+
+
+def insertNoCommit(table, **kw):
+    _insert(table, False, **kw)
+
+
+def insert(table, **kw):
+    '''
+    Execute insert SQL.
+
+    >>> u1 = dict(id=2000, name='Bob', email='bob@test.org',
+    ... passwd='bobobob', last_modified=time.time())
+    >>> insert('user', **u1)
+    1
+    >>> u2 = select_one('select * from user where id=?', 2000)
+    >>> u2.name
+    u'Bob'
+    >>> insert('user', **u2)
+    Traceback (most recent call last):
+      ...
+    IntegrityError: 1062 (23000): Duplicate entry '2000' for key 'PRIMARY'
+    '''
+    _insert(table, True, **kw)
+    # cols, args = zip(*kw.iteritems())
+    # sql = 'insert into `%s` (%s) values (%s)' % (
+    #     table, ','.join(['`%s`' % col for col in cols]),
+    #     ','.join(['?' for i in range(len(cols))]))
+    # return _update(sql, *args)
 
 
 def update(sql, *args):
@@ -425,6 +468,10 @@ def update(sql, *args):
     0
     '''
     return _update(sql, *args)
+
+
+def updateNoCommit(sql, *args):
+    return __update(sql, *args)
 
 
 if __name__ == '__main__':

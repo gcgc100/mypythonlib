@@ -17,11 +17,11 @@ class TestOsAddon(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        shutil.rmtree("./gClifford/tests/dataForTest/output")
-        os.mkdir("./gClifford/tests/dataForTest/output")
+        shutil.rmtree("./tests/dataForTest/output")
+        os.mkdir("./tests/dataForTest/output")
 
     def setUp(self):
-        outputdir = "./gClifford/tests/dataForTest/output"
+        outputdir = "./tests/dataForTest/output"
         if not os.path.isdir(outputdir):
             os.mkdir(outputdir)
 
@@ -39,7 +39,7 @@ class TestOsAddon(unittest.TestCase):
             os.path.dirname(os.path.abspath(__file__))+"/testSize"), 1775)
 
     def test_smartCopy(self):
-        testdata = "./gClifford/tests/dataForTest/"
+        testdata = "./tests/dataForTest/"
         src = testdata+"a.txt"
         output = testdata+"output"
         osAddon.smartCopy(src, output)

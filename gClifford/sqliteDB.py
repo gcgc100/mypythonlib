@@ -415,7 +415,7 @@ def _insert(table, commit=True, **kw):
 
 
 def insertNoCommit(table, **kw):
-    _insert(table, False, **kw)
+    return _insert(table, False, **kw)
 
 
 def insert(table, **kw):
@@ -434,7 +434,7 @@ def insert(table, **kw):
       ...
     IntegrityError: 1062 (23000): Duplicate entry '2000' for key 'PRIMARY'
     '''
-    _insert(table, True, **kw)
+    return _insert(table, True, **kw)
     # cols, args = zip(*kw.iteritems())
     # sql = 'insert into `%s` (%s) values (%s)' % (
     #     table, ','.join(['`%s`' % col for col in cols]),

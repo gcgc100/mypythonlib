@@ -19,7 +19,7 @@ class TestSqliteDB(unittest.TestCase):
 
     def test_textWithQuote(self):
         sqliteDB.insert('test', **{"key": 'aa'})
-        sqliteDB.update("update test set key=?", "aaa")
+        sqliteDB.update("update test set key=?, v=?", "aaa", "ee")
         row = sqliteDB.select("select * from test where key=?", "aaa")
         self.assertEqual(len(row), 1)
         self.assertEqual(row[0].key, "aaa")

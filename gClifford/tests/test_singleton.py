@@ -6,10 +6,10 @@ import sys, os
 from gClifford import Singleton
 
 
-class single(object):
+class single(metaclass=Singleton.Singleton):
 
         """Singleton class"""
-        __metaclass__ = Singleton.Singleton
+        # __metaclass__ = Singleton.Singleton
 
         def __init__(self):
                 """for test """

@@ -32,7 +32,7 @@ class TestSqliteDB(unittest.TestCase):
             sqliteDB.insertNoCommit('test', **{"key": 'a'})
         sqliteDB.insert('test', **{"key": 'a'})
         t2 = time.time()
-        print t2-t1
+        print(t2-t1)
         sqliteDB.update("delete from test")
 
 
@@ -40,10 +40,10 @@ class TestSqliteDB(unittest.TestCase):
         ret = sqliteDB.insert('test', **{"key": 'aaaa'})
         rowcount = ret[0]
         rowid = ret[1]
-        print "Insert %s rows, row id: %s" % (rowcount, rowid)
+        print("Insert %s rows, row id: %s" % (rowcount, rowid))
         for i in range(100):
             ret = sqliteDB.insertNoCommit('test', **{"key": 'bbb'})
             rowcount = ret[0]
             rowid = ret[1]
-            print "Insert %s rows, row id: %s" % (rowcount, rowid)
+            print("Insert %s rows, row id: %s" % (rowcount, rowid))
         sqliteDB.update("delete from test")

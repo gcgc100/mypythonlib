@@ -10,10 +10,10 @@ class TestDispatcher(unittest.TestCase):
     count = 0
     def target(self):
         self.count = 5
-        print "I should appear after 5s"
+        print("I should appear after 5s")
     def target2(self):
         self.count = 10
-        print "I should appear after 10s"
+        print("I should appear after 10s")
     def test_dispatch_basic(self):
         """Test dispatch function"""
         h = disp.dispatch(self.target, delaytime=5)

@@ -6,7 +6,7 @@ import sys
 import os
 import shutil
 
-import ModuleUsingConfig as mc
+import gClifford.tests.ModuleUsingConfig as mc
 from gClifford import Config
 
 class TestConfig(unittest.TestCase):

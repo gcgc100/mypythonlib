@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import ConfigParser
+# import ConfigParser
+import configparser
 import os
 from Singleton import Singleton
 import osAddon
@@ -8,22 +9,22 @@ import osAddon
 cwd = os.getcwd()
 
 
-class Config(object):
+class Config(metaclass=Singleton):
     """docstring for Config"""
-    __metaclass__ = Singleton
     _config = None
 
     def __init__(self):
         """docstring for __init__"""
         global _config
-        _config = ConfigParser.RawConfigParser()
+        # _config = ConfigParser.RawConfigParser()
+        _config = configparser.RawConfigParser()
         if not os.path.isfile("config/config.cfg"):
             osAddon.ensure_dir("config/config.cfg")
             config = _config
             config.add_section('config')
-            with open('config/config.cfg', 'wb') as configfile:
+            with open('config/config.cfg', 'w') as configfile:
                 config.write(configfile)
-            print "init config OK"
+            print("init config OK")
         else:
             _config.read("config/config.cfg")
 
@@ -42,11 +43,12 @@ class Config(object):
 
         """
         global _config
-        _config = ConfigParser.RawConfigParser()
+        # _config = ConfigParser.RawConfigParser()
+        _config = configparser.RawConfigParser()
         if not os.path.isfile(name):
             config = _config
             config.add_section('config')
-            with open(name, 'wb') as configfile:
+            with open(name, 'w') as configfile:
                 config.write(configfile)
         else:
             _config.read(name)

@@ -22,11 +22,6 @@ def ensure_dir(file_path):
         directory = "./"
     if not os.path.exists(directory):
         os.makedirs(directory)
-    # directory = os.path.dirname(os.path.abspath(file_path))
-    # print os.path.abspath(file_path)
-    # print directory
-    # if not os.path.exists(directory):
-    #     os.makedirs(directory)
 
 
 def get_size(start_path='.'):

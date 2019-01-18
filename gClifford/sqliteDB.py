@@ -404,7 +404,7 @@ def _insert(table, commit=True, **kw):
       ...
     IntegrityError: 1062 (23000): Duplicate entry '2000' for key 'PRIMARY'
     '''
-    cols, args = zip(*kw.iteritems())
+    cols, args = zip(*kw.items())
     sql = 'insert into `%s` (%s) values (%s)' % (
         table, ','.join(['`%s`' % col for col in cols]),
         ','.join(['?' for i in range(len(cols))]))
@@ -435,7 +435,7 @@ def insert(table, **kw):
     IntegrityError: 1062 (23000): Duplicate entry '2000' for key 'PRIMARY'
     '''
     return _insert(table, True, **kw)
-    # cols, args = zip(*kw.iteritems())
+    # cols, args = zip(*kw.items())
     # sql = 'insert into `%s` (%s) values (%s)' % (
     #     table, ','.join(['`%s`' % col for col in cols]),
     #     ','.join(['?' for i in range(len(cols))]))

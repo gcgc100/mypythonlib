@@ -24,7 +24,7 @@ class TestMyLogging(unittest.TestCase):
     def test_logfile(self):
         logger.debug("1 test")
         return
-        print l.ROOT_DIR
+        print(l.ROOT_DIR)
         with open("log/log.log") as f:
             text = f.read()
             self.assertTrue(text.endswith("DEBUG, 1 test\n"))
@@ -33,7 +33,7 @@ class TestMyLogging(unittest.TestCase):
         class t(object):
             @l.contextLog(logger)
             def func(self):
-                print "inside func"
+                print("inside func")
 
         t().func()
 

@@ -30,6 +30,7 @@ __all__ = ["create_engine", "select", "update", "insert",
 import logging
 import functools
 import threading
+logger = logging.getLogger(__name__)
 
 
 class Dict(dict):
@@ -103,7 +104,7 @@ class _LasyConnection(object):
         """
         if self.connection is None:
             _connection = engine.connect()
-            logging.info('open connection <%s>...', hex(id(_connection)))
+            logger.info('open connection <%s>...', hex(id(_connection)))
             self.connection = _connection
         return self.connection.cursor()
 
@@ -126,7 +127,7 @@ class _LasyConnection(object):
         if self.connection:
             _connection = self.connection
             self.connection = None
-            logging.info('close connection <%s>...', hex(id(_connection)))
+            logger.info('close connection <%s>...', hex(id(_connection)))
             _connection.close()
 
 
@@ -149,7 +150,7 @@ class _DbCtx(threading.local):
         """
         Open lazy connection
         """
-        logging.info('open lazy connection...')
+        logger.info('open lazy connection...')
         self.connection = _LasyConnection()
         self.transactions = 0
 
@@ -195,8 +196,8 @@ def create_engine(database, **kw):
         database=database)
     params.update(kw)
     engine = _Engine(lambda: sqlite3.connect(**params))
-    logging.info(engine.connect())
-    logging.info('Init mysql engine <%s> ok.', hex(id(engine)))
+    logger.info(engine.connect())
+    logger.info('Init mysql engine <%s> ok.', hex(id(engine)))
 
 
 class _ConnectionCtx(object):
@@ -257,7 +258,7 @@ def _select(sql, first, *args):
     global _db_ctx
     cursor = None
     # sql = sql.replace('?', '%s')
-    logging.info('SQL: %s, ARGS: %s', sql, args)
+    logger.info('SQL: %s, ARGS: %s', sql, args)
     cursor = _db_ctx.connection.cursor()
     cursor.execute(sql, args)
     if cursor.description:
@@ -365,13 +366,13 @@ def _update(sql, *args):
     global _db_ctx
     cursor = None
     # sql = sql.replace('?', '%s')
-    logging.info('SQL: %s, ARGS: %s', sql, args)
+    logger.info('SQL: %s, ARGS: %s', sql, args)
     cursor = _db_ctx.connection.cursor()
     cursor.execute(sql, args)
     ret = cursor.rowcount
     rowid = cursor.lastrowid
     if _db_ctx.transactions == 0:
-        logging.info('auto commit')
+        logger.info('auto commit')
         _db_ctx.connection.commit()
     return ret, rowid
 
@@ -380,7 +381,7 @@ def __update(sql, *args):
     global _db_ctx
     cursor = None
     # sql = sql.replace('?', '%s')
-    logging.info('SQL: %s, ARGS: %s', sql, args)
+    logger.info('SQL: %s, ARGS: %s', sql, args)
     cursor = _db_ctx.connection.cursor()
     cursor.execute(sql, args)
     ret = cursor.rowcount

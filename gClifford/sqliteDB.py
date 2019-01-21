@@ -377,6 +377,7 @@ def _update(sql, *args):
     return ret, rowid
 
 
+@with_connection
 def __update(sql, *args):
     global _db_ctx
     cursor = None

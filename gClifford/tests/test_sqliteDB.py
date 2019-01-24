@@ -29,7 +29,7 @@ class TestSqliteDB(unittest.TestCase):
         import time
         t1 = time.time()
         for i in range(100):
-            sqliteDB.insertNoCommit('test', **{"key": 'a'})
+            sqliteDB.insert('test', commit=False, **{"key": 'a'})
         sqliteDB.insert('test', **{"key": 'a'})
         t2 = time.time()
         print(t2-t1)
@@ -42,7 +42,7 @@ class TestSqliteDB(unittest.TestCase):
         rowid = ret[1]
         print("Insert %s rows, row id: %s" % (rowcount, rowid))
         for i in range(100):
-            ret = sqliteDB.insertNoCommit('test', **{"key": 'bbb'})
+            ret = sqliteDB.insert('test', commit=False, **{"key": 'bbb'})
             rowcount = ret[0]
             rowid = ret[1]
             print("Insert %s rows, row id: %s" % (rowcount, rowid))

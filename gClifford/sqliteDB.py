@@ -415,12 +415,7 @@ def _insert(table, commit=True, **kw):
     else:
         return __update(sql, *args)
 
-
-def insertNoCommit(table, **kw):
-    return _insert(table, False, **kw)
-
-
-def insert(table, **kw):
+def insert(table, commit=True, **kw):
     '''
     Execute insert SQL.
 
@@ -436,7 +431,7 @@ def insert(table, **kw):
       ...
     IntegrityError: 1062 (23000): Duplicate entry '2000' for key 'PRIMARY'
     '''
-    return _insert(table, True, **kw)
+    return _insert(table, commit, **kw)
     # cols, args = zip(*kw.items())
     # sql = 'insert into `%s` (%s) values (%s)' % (
     #     table, ','.join(['`%s`' % col for col in cols]),
@@ -444,7 +439,7 @@ def insert(table, **kw):
     # return _update(sql, *args)
 
 
-def update(sql, *args):
+def update(sql, *args, commit=True):
     r'''
     Execute update SQL.
 
@@ -469,12 +464,10 @@ def update(sql, *args):
     ... '123\' or id=\'456')
     0
     '''
-    return _update(sql, *args)
-
-
-def updateNoCommit(sql, *args):
-    return __update(sql, *args)
-
+    if commit:
+        return _update(sql, *args)
+    else:
+        return __update(sql, *args)
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)

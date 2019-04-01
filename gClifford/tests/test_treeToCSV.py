@@ -50,7 +50,7 @@ class TestTreeToCSV(unittest.TestCase):
     """Test treeToCSV module"""
 
     def setUp(self):
-        self.testTmpDir = "./tests/dataForTest/tmp"
+        self.testTmpDir = "./gClifford/tests/dataForTest/tmp"
         self.treeRoot = TreeNode("a")
         for i in range(10):
             self.treeRoot.children.append(TreeNode("b%s" % i, self.treeRoot))

@@ -14,7 +14,7 @@ class TestSqliteDB(unittest.TestCase):
 
     def setUp(self):
         if sqliteDB.engine is None:
-            sqliteDB.create_engine('test.db')
+            sqliteDB.create_engine('./gClifford/tests/test.db')
         sqliteDB.update("create table if not exists test (key text, v text)")
 
     def tearDown(self):

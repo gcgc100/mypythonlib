@@ -3,8 +3,8 @@
 # import ConfigParser
 import configparser
 import os
-from Singleton import Singleton
-import osAddon
+from gClifford.Singleton import Singleton
+import gClifford.osAddon as osAddon
 
 cwd = os.getcwd()
 

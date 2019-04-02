@@ -28,12 +28,6 @@ class TestOsAddon(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_ensure_dir(self):
-        osAddon.ensure_dir("testDir/test")
-        os.rmdir("testDir")
-        osAddon.ensure_dir("test.md")
-        osAddon.ensure_dir("./test")
-
     def test_get_size(self):
         self.assertEqual(osAddon.get_size(
             os.path.dirname(os.path.abspath(__file__))+"/testSize"), 1775)

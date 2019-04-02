@@ -15,15 +15,6 @@ def remember_cwd():
         os.chdir(curdir)
 
 
-def ensure_dir(file_path):
-    """ensure the dir exist. Check the dir, if not exist create one"""
-    directory = os.path.dirname(file_path)
-    if directory == "":
-        directory = "./"
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-
-
 def get_size(start_path='.'):
     """
     Return the total size of the path.
@@ -60,7 +51,3 @@ def smartCopy(src, des):
         seq += 1
         newfilePath = os.path.join(des, "{0}{1}{2}".format(rawname, seq, ext))
     shutil.copy(src, newfilePath)
-
-if __name__ == '__main__':
-    pass
-    ensure_dir("./Config/")

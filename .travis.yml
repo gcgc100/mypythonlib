@@ -1,4 +1,9 @@
 language: python
 python:
-  - "3.5"
+    - "3.5"
 script: nosetests
+
+services:
+    - mysql
+before_install:
+    - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'

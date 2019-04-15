@@ -343,7 +343,7 @@ passwd='A-12345', last_modified=time.time())
     d = _select(sql, True, *args)
     if len(d) != 1:
         raise MultiColumnsError('Expect only one column.')
-    return d.values()[0]
+    return list(d.values())[0]
 
 
 @with_connection

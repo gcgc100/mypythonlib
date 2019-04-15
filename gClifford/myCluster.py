@@ -6,8 +6,9 @@ from sklearn.cluster import KMeans
 from sklearn.cluster import MeanShift, estimate_bandwidth
 from sklearn.cluster import DBSCAN
 from sklearn.cluster import Birch
+from sklearn.datasets import fetch_20newsgroups
 
-import tfIdf
+import gClifford.tfIdf as tfIdf
 
 class myCluster(object):
     """This is my base cluster. Define basic methods. The other cluster inherit it."""
@@ -15,19 +16,29 @@ class myCluster(object):
     def __init__(self):
         super(myCluster, self).__init__()
 
-    def items():
-        doc = "The items property."
-        def fget(self):
-            return self._items
-        def fset(self, value):
-            self._items = value
-        def fdel(self):
-            del self._items
-        return locals()
-    items = property(**items())
+    # def items():
+    #     doc = "The items property."
+    #     def fget(self):
+    #         return self._items
+    #     def fset(self, value):
+    #         self._items = value
+    #     def fdel(self):
+    #         del self._items
+    #     return locals()
+    # items = property(**items())
 
     def generateCorpus(self):
         """Generate corpus for cluster. Return a dict. The key is the original item, value is the string."""
+        corpus = [
+            'This is the first document.',
+            'This is the second second document.',
+            'And the third one.',
+            'Is this the first document?',
+        ]
+        categories = ['alt.atheism', 'talk.religion.misc', 'comp.graphics', 'sci.space']
+        newsgroups_train = fetch_20newsgroups(subset='train', 
+                categories=categories)
+        return newsgroups_train.data[:200]
         raise NotImplementedError()
 
 #    def KMeansCluster(self, n_clusters):
@@ -46,10 +57,11 @@ class myCluster(object):
         def vectorizerDefault():
             """vectorizer callback func"""
             corpus = self.generateCorpus()
-            self.items = corpus.keys()
-            vectors = tfIdf.tfIdf(corpus.values())
-            pkl = {"items": self.items, "vectors": vectors}
-            pickle.dump(pkl, open("vectors.p", "wb"))
+            # self.items = corpus.keys()
+            # vectors = tfIdf.tfIdf(corpus.values())
+            vectors = tfIdf.tfIdf(corpus)
+            # pkl = {"items": self.items, "vectors": vectors}
+            # pickle.dump(pkl, open("vectors.p", "wb"))
             return vectors
         vectorizer = vectorizer or vectorizerDefault
         cluster = cluster or myCluster.KMeansCluster
@@ -69,7 +81,7 @@ class myCluster(object):
     @classmethod
     def MeanShiftCluster(self, n_clusters, vectors, **kw):
         """Cluster the vectors with MeanShift algorithm"""
-        bandwidth = estimate_bandwidth(vectors.toarray(), quantile=0.2, n_samples=10)
+        bandwidth = estimate_bandwidth(vectors.toarray(), quantile=0.9, n_samples=2)
         ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
         ms.fit(vectors.toarray())
         return ms

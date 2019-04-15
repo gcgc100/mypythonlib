@@ -19,7 +19,7 @@ class Config(metaclass=Singleton):
         # _config = ConfigParser.RawConfigParser()
         _config = configparser.RawConfigParser()
         if not os.path.isfile("config/config.cfg"):
-            osAddon.ensure_dir("config/config.cfg")
+            os.makedirs("config", exist_ok=False)
             config = _config
             config.add_section('config')
             with open('config/config.cfg', 'w') as configfile:

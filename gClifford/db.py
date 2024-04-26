@@ -21,7 +21,7 @@ def _createEngine(func):
 @_createEngine
 def myselect:
     pass
-@_createEngine:
+@_createEngine
 def myinsert:
     pass
 """

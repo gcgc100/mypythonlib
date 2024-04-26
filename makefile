@@ -5,11 +5,12 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 
 test:
-	python setup.py test
+	# python setup.py test
+	pytest
 	@echo Warning: This test skip test_dispatcher because its long delay. Test it specifically if you need.
 
 help:
 	@echo " 	test"
-	@echo " 		nosetests the tests."
+	@echo " 		pytest the tests."
 	@echo " 	clean-pyc"
 	@echo " 		Remove python artifacts."

@@ -17,11 +17,11 @@ class Config(metaclass=Singleton):
         """docstring for __init__"""
         global _config
         # _config = ConfigParser.RawConfigParser()
-        _config = configparser.RawConfigParser()
+        _config = configparser.ConfigParser()
         if not os.path.isfile("config/config.cfg"):
             os.makedirs("config", exist_ok=False)
             config = _config
-            config.add_section('config')
+            config['DEFAULT'] = {}
             with open('config/config.cfg', 'w') as configfile:
                 config.write(configfile)
             print("init config OK")
@@ -31,12 +31,18 @@ class Config(metaclass=Singleton):
     def __getattr__(self, key):
         global _config
         try:
-            return _config.get('config', key)
+            return _config['DEFAULT'][key]
         except KeyError:
             raise AttributeError(r"'Dict' object has no attribute '%s'" % key)
 
     def __setattr__(self, key, value):
         raise AttributeError("Readonly")
+
+    @property
+    def config(self):
+        """The config property."""
+        global _config
+        return _config
 
     def reload(self, name="config/config.cfg"):
         """
@@ -44,10 +50,10 @@ class Config(metaclass=Singleton):
         """
         global _config
         # _config = ConfigParser.RawConfigParser()
-        _config = configparser.RawConfigParser()
+        _config = configparser.ConfigParser()
         if not os.path.isfile(name):
             config = _config
-            config.add_section('config')
+            config['DEFAULT'] = {}
             with open(name, 'w') as configfile:
                 config.write(configfile)
         else:

@@ -31,9 +31,9 @@ class TestConfig():
         shutil.rmtree("config")
             
     def test_name(self, config):
-        assert Config.Config().name == "config"
+        assert Config.defaultConfig.get("name") == "config"
         Config.Config().reload("config/test.cfg")
-        assert Config.Config().name == "test"
+        assert Config.defaultConfig.get("name") == "test"
         assert Config.Config().config["DEFAULT"]["name"] == "test"
         Config.Config().reload("config/config.cfg")
 

@@ -1,4 +1,4 @@
 from gClifford.Config import Config
 
 def printValue():
-    return Config().name
+    return Config().config["DEFAULT"]["name"]

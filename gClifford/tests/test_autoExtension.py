@@ -3,8 +3,6 @@
 
 import sys
 from os import path
-
-from scipy.linalg import det
 sys.path.insert(0, path.join(path.dirname(path.abspath(__file__)), ".."))
 
 from pathlib import Path

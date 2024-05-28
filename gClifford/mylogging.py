@@ -15,6 +15,7 @@ import logging
 import os
 import sys
 from functools import wraps
+import threading
 ROOT_DIR = os.path.abspath(sys.path[0])
 
 
@@ -54,10 +55,12 @@ class LogConfig(object):
 
 
 logDir = ROOT_DIR+"/log"
+_thread_locals = threading.local()
 if not os.path.exists(logDir):
     os.mkdir(logDir)
 logConfig = LogConfig()
-logConfig.fhConfig = {"filename": logDir+'/log.log'}
+logConfig.fhConfig = {"filename": logDir+'/'+str(os.getpid())+'log.log'}
+# logConfig.fhConfig = {"filename": logDir+'/log.log'}
 logConfig.infohConfig = {"filename": logDir+'/info.log'}
 logConfig.errorhConfig = {"filename": logDir+'/error.log'}
 logConfig.formatter = logging.Formatter(
@@ -76,33 +79,36 @@ def configLogger(reset=True, stream=True, file=True):
 
     """
     # create logger with 'spam_application'
-    logger = logging.getLogger(__name__)
-    if reset:
-        for handler in logger.handlers[:]:  # make a copy of the list
-            logger.removeHandler(handler)
-    logger.setLevel(logging.DEBUG)
-    if len(logger.handlers) > 0:
-        return logger
-    # create file handler which logs even debug messages
-    cfg = [[logConfig.fhConfig, logging.DEBUG],
-           [logConfig.infohConfig, logging.INFO],
-           [logConfig.errorhConfig, logging.ERROR]]
-    if file:
-        handler = None
-        for handlerCfg in cfg:
-            handler = logging.FileHandler(**handlerCfg[0])
-            handler.setLevel(handlerCfg[1])
-            handler.setFormatter(logConfig.formatter)
-            logger.addHandler(handler)
-    # create console handler with a higher log level
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
-    # create formatter and add it to the handlers
-    ch.setFormatter(logConfig.formatter)
-    # add the handlers to the logger
-    if stream:
-        logger.addHandler(ch)
-    return logger
+    if not hasattr(_thread_locals, 'logger'):
+        logger = logging.getLogger(__name__)
+        if reset:
+            for handler in logger.handlers[:]:  # make a copy of the list
+                logger.removeHandler(handler)
+        logger.setLevel(logging.DEBUG)
+        if len(logger.handlers) > 0:
+            return logger
+        # create file handler which logs even debug messages
+        cfg = [[logConfig.fhConfig, logging.DEBUG],
+               [logConfig.infohConfig, logging.INFO],
+               [logConfig.errorhConfig, logging.ERROR]]
+        if file:
+            handler = None
+            for handlerCfg in cfg:
+                handler = logging.FileHandler(**handlerCfg[0])
+                handler.setLevel(handlerCfg[1])
+                handler.setFormatter(logConfig.formatter)
+                logger.addHandler(handler)
+        # create console handler with a higher log level
+        ch = logging.StreamHandler()
+        ch.setLevel(logging.DEBUG)
+        # create formatter and add it to the handlers
+        ch.setFormatter(logConfig.formatter)
+        # add the handlers to the logger
+        if stream:
+            logger.addHandler(ch)
+        _thread_locals.logger = logger
+    return _thread_locals.logger
+    # return logger
 
 """The default logger return from configLogger()"""
 logger = configLogger(reset=False)

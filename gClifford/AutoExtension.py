@@ -20,18 +20,23 @@ class AutoExtension(object):
         self.driverPath = driverPath
         # self.tmpUserData = tempfile.mkdtemp()
 
-    def initSelenium(self):
+    def initSelenium(self, disableCache=True, customOption=None):
         driver_path = self.driverPath
         chrome_options = Options()
         # chrome_options.add_argument('--headless')
         # chrome_options.add_argument('--disable-gpu')
         chrome_options.add_extension(str(self.extensionCrxPath))
         # chrome_options.add_argument(self.tmpUserData)
+        if customOption is not None:
+            assert callable(customOption)
+            chrome_options = customOption(chrome_options)
         if driver_path is None:
             s = Service()
         else:
             s = Service(executable_path=driver_path)
         driver = webdriver.Chrome(options=chrome_options, service=s) #打开扩展posta 
+        if disableCache:
+            driver.execute_cdp_cmd("Network.setCacheDisabled", {"cacheDisabled":True})
         self.driver = driver
         
         driver.get("chrome://extensions")

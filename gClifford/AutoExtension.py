@@ -6,12 +6,27 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 
+
 from pathlib import Path
 # import tempfile
 import json
 import functools
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
+
+def updateDriver():
+    """
+    Update the chromedriver with webdriver_manager module
+    return driver_path
+    """
+    from webdriver_manager.chrome import ChromeDriverManager
+    driver_path = ChromeDriverManager().install()
+    driver_path = Path(driver_path)
+    if driver_path.name == "THIRD_PARTY_NOTICES.chromedriver":
+        driver_path = driver_path.parent / "chromedriver" 
+    return str(driver_path)
+    
+    pass
 
 class AutoExtension(object):
     
@@ -34,6 +49,7 @@ class AutoExtension(object):
             s = Service()
         else:
             s = Service(executable_path=driver_path)
+        # driver = webdriver.Chrome(options=chrome_options, service=s) #打开扩展posta 
         driver = webdriver.Chrome(options=chrome_options, service=s) #打开扩展posta 
         if disableCache:
             driver.execute_cdp_cmd("Network.setCacheDisabled", {"cacheDisabled":True})

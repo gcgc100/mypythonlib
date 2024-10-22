@@ -8,6 +8,7 @@ sys.path.insert(0, path.join(path.dirname(path.abspath(__file__)), ".."))
 from pathlib import Path
 
 from AutoExtension import AutoExtension
+from AutoExtension import updateDriver
 
 
 class TestAutoExtension(object):
@@ -37,4 +38,12 @@ class TestAutoExtension(object):
         return
         self.ae.clickExtensionButton()
 
-
+    def test_updateDriver(self):
+        try:
+            driver_path = updateDriver()
+            print(driver_path)
+            assert driver_path is not None
+        except ModuleNotFoundError:
+            print("webdriver_manager module is not installed")
+        except Exception as e:
+            raise e
